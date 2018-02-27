@@ -1,0 +1,79 @@
+{extend name="template/index" /}
+
+{block name="content"}
+<div class="panel panel-default">
+
+    <div class="panel-heading">
+        <h4 class="panel-title">{:$mate_title}</h4>
+    </div>
+
+    <div class="panel-body">
+
+        <form class="form-horizontal form-bordered" action="" method="">
+            <div class="form-group">
+                <div class="col-md-8">
+                    <a href="javascript:checkAll(true);" class="btn btn-link">
+                        <i class="fa fa-check-square-o text-success">&nbsp;全&nbsp;选&nbsp;</i>
+                    </a>
+                    <a href="javascript:checkAll(false);" class="btn btn-link">
+                        <i class="fa fa-square-o">&nbsp;全不选&nbsp;</i>
+                    </a>
+                    <a href="javascript:checkDel('0');" class="btn btn-link">
+                        <i class="fa fa-trash-o   text-danger">&nbsp;删&nbsp;除&nbsp;</i>
+                    </a>
+                    <a href="{:url('create')}" class="btn btn-link">
+                        <i class="fa fa-plus">&nbsp;添&nbsp;加&nbsp;</i>
+                    </a>
+                </div>
+            </div>
+        </form>
+
+        <div class="table-responsive">
+            <table class="table table-info table-striped  table-hover text-center">
+                <thead>
+                <tr>
+                    <th>全选</th>
+                    <th>用户名</th>
+                    <th>昵称</th>
+                    <th>手机号</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {volist name="list" id="vo"}
+                <tr>
+                    <td>
+                        <input id="checkbox{$vo.id}" type="checkbox" name="checkid[]" value="{$vo.id}"/>
+                    </td>
+                    <td>{$vo.username}</td>
+                    <td>{$vo.nickname}</td>
+                    <td>{$vo.mobile}</td>
+                    <td>
+                        {eq name="1" value="$vo.status"}
+                        <a href="javascript:checkUp('{$vo.id}','status','0');">
+                            <i class="glyphicon glyphicon-ok-sign text-success"></i>
+                        </a>
+                        {else/}
+                        <a href="javascript:checkUp('{$vo.id}','status','1');">
+                            <i class="glyphicon glyphicon-remove-sign text-danger"></i>
+                        </a>
+                        {/eq}
+                    </td>
+                    <td>
+                        <a href="{:url('update',['id'=>$vo.id])}">
+                            <i class="fa fa-pencil">&nbsp;&nbsp;编 辑&nbsp;</i>
+                        </a>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="javascript:checkDel('{$vo.id}');">
+                            <i class="fa fa-trash-o">&nbsp;&nbsp;删 除&nbsp;</i>
+                        </a>
+                    </td>
+                </tr>
+                {/volist}
+                </tbody>
+            </table>
+        </div><!-- table-responsive -->
+    </div><!-- panel-body -->
+</div>
+{/block}

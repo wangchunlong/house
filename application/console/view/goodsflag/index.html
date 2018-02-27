@@ -1,0 +1,56 @@
+{extend name="template/index" /}
+
+{block name="content"}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <a href="{:url('create')}" class="btn btn-link" style="float:right;">
+            <i class="fa fa-plus">&nbsp;添加属性&nbsp;</i>
+        </a>
+        <h4 class="panel-title">{:$mate_title}</h4>
+    </div>
+
+    <div class="panel-body panel-body-nopadding">
+        <div class="table-responsive">
+            <table class="table table-info table-striped table-bordered table-hover text-center">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>名称</th>
+                    <th>属性值</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {volist name="list" id="vo"}
+                <tr>
+                    <td>{$vo.id}</td>
+                    <td>{$vo.title}</td>
+                    <td>
+                        <a href="{:url('goodsattr/index',['flag_id'=>$vo.id])}">
+                            <i class="fa fa-list">&nbsp;属性值&nbsp;</i>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{:url('update',['id'=>$vo.id])};">
+                            <i class="fa fa-edit">&nbsp;编 辑&nbsp;</i>
+                        </a>
+
+                        <a href="javascript:checkDel('{$vo.id}');">
+                            <i class="fa fa-trash-o">&nbsp;删除&nbsp;</i>
+                        </a>
+                    </td>
+                </tr>
+                {/volist}
+                {empty name="list"}
+                <tr>
+                    <td colspan="11">
+                        <div style='font-size:24px;margin:30px;'>没有找到记录</div>
+                    </td>
+                </tr>
+                {/empty}
+                </tbody>
+            </table>
+        </div><!-- table-responsive -->
+    </div>
+</div>
+{/block}

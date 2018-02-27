@@ -1,0 +1,73 @@
+<div class="headerbar">
+    <a class="menutoggle"><i class="fa fa-bars"></i></a>
+    <div class="header-left">
+        <ul class="headermenu">
+            <li>
+                <div class="btn-group">
+                    <a href="{:url('Index/Index/index')}" target="_blank">
+                        <button class="btn btn-default tp-icon" title="预览网站">
+                            <i class="fa fa-send">&nbsp;预览网站</i>
+                        </button>
+                    </a>
+                </div>
+                <div class="btn-group">
+                    <a href="{:url('Generate/Generate/index')}" target="_blank">
+                        <button class="btn btn-default tp-icon" title="生成代码">
+                            <i class="fa fa-html5">&nbsp;生成代码</i>
+                        </button>
+                    </a>
+                </div>
+                <div class="btn-group">
+                    <a href="/adminer.php" target="_blank">
+                        <button class="btn btn-default tp-icon" title="数据编辑">
+                            <i class="fa fa fa-database">&nbsp;数据编辑</i>
+                        </button>
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="header-right">
+        <ul class="headermenu">
+            <li>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <img src="__CONSOLE__/images/photos/user{$user.avatar}.jpg" alt="">
+                        <span>{$user.username}</span>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
+                        <li>
+                            <a data-toggle="modal" data-target=".bs-myinfo-modal-lg">
+                                <i class="fa fa-user"></i> 我的信息
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:logout('{:url(\'Console/login/logout\')}');">
+                                <i class="fa fa-sign-out"></i> 退出
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    function logout(url) {
+        swal({
+            title: "确定要退出?",
+            text: "你将退出管理后台!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "确认",
+            cancelButtonText: '取消',
+            closeOnConfirm: false
+        }, function () {
+            top.location = url;
+            return true;
+        });
+    }
+</script>

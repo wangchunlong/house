@@ -1,0 +1,76 @@
+{extend name="template/index" /}
+
+{block name="content"}
+<div class="panel panel-default">
+
+    <div class="panel-heading">
+        <h4 class="panel-title">数据库操作</h4>
+    </div>
+
+    <div class="panel-body">
+
+        {notempty name="$tables"}
+        <div class="table-responsive">
+            <table class="table table-info table-striped table-bordered table-hover text-center">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>表名</th>
+                    <th>表注释</th>
+                    <th>记录数</th>
+                    <th>数据大小【共{$total}】</th>
+                    <th>引擎</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {volist name="$tables" id="value"}
+                <tr>
+                    <td>{$i}</td>
+                    <td><a href="{:url('baksql/mysql',['table'=>$value.Name])}">{$value.Name}</a></td>
+                    <td>{empty name="$value.Comment"}无注释{else/}{$value.Comment}{/empty}</td>
+                    <td>{$value.Rows}(行)</td>
+                    <td>{$value.size}</td>
+                    <td>{$value.Engine}</td>
+                </tr>
+                {/volist}
+                </tbody>
+            </table>
+        </div>
+        {/notempty}
+
+        {notempty name="$table"}
+        <div class="table-responsive">
+            <table class="table table-info table-striped table-hover text-center">
+                <thead>
+                <tr>
+                    <th>字段</th>
+                    <th>【备注】</th>
+                    <th>类型【长度】</th>
+                    <th>整理</th>
+                    <th>允许为空</th>
+                    <th>默认值</th>
+                </tr>
+                </thead>
+                <tbody>
+                {foreach $table as $value}
+                <tr>
+                    <td>{$value.Field}{if $value.Key=='PRI'}(主键){/if}</td>
+                    <td>{if empty($value.Comment)}无注释{else/}{$value.Comment}{/if}</td>
+                    <td>{$value.Type}</td>
+                    <td>{$value.Collation}</td>
+                    <td>{if($value.Null)=='No'}否{else/}是{/if}</td>
+                    <td>{if empty($value.Default)}无默认值{else/}{$value.Default}{/if}</td>
+                </tr>
+                {/foreach}
+                <tr>
+                    <td colspan="7">总共【{:count($table)}】个字段</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        {/notempty}
+
+    </div>
+</div>
+{/block}

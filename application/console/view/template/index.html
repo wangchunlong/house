@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="__CONSOLE__/images/favicon.png" type="image/png">
+    <title>{$mate_title}   ---  {$app_title}</title>
+
+    <!-- bootstrap插件默认样式 -->
+    <link href="__CONSOLE__/css/style.default.css" rel="stylesheet">
+    <!-- datatables列表样式 -->
+    <link href="__CONSOLE__/css/jquery.datatables.css" rel="stylesheet">
+    <!-- sweetalert弹出样式 -->
+    <link href="__PLUGIN__/sweetalert/css/sweetalert.css" rel="stylesheet">
+
+    {block name="css"}{/block}
+    <style>
+        tr, th, td {
+            text-align: center;
+        }
+    </style>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="__CONSOLE__/js/html5shiv.js"></script>
+    <script src="__CONSOLE__/js/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+
+<!-- start-preloader -->
+<div id="preloader">
+    <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
+</div>
+<!-- end-preloader -->
+
+<section>
+
+    {include file="template:sidebar" /}
+    <!-- start-mainpanel -->
+    <div class="mainpanel">
+        {include file="template:topbar" /}
+
+        <!-- start-pageheader -->
+        <div class="pageheader">
+            <h2><i class="fa fa-home"></i> {$mate_title} <span>欢迎光临平台.......</span></h2>
+        </div>
+        <!-- end-pageheader -->
+
+
+        <!-- start-contentpanel -->
+        <div class="contentpanel"> {block name="content"}{/block}</div>
+        <!-- end-contentpanel -->
+
+    </div>
+    <!-- end-mainpanel -->
+    <div id="submit1" style="display: none"></div>
+
+</section>
+
+<script src="__CONSOLE__/js/jquery-1.11.1.min.js"></script><!--jquery-1.11.1插件-->
+<script src="__CONSOLE__/js/jquery-migrate-1.2.1.min.js"></script><!--应用迁移辅助插件-->
+<script src="__CONSOLE__/js/bootstrap.min.js"></script><!--bootstrap插件-->
+<script src="__CONSOLE__/js/modernizr.min.js"></script><!--是一个检测用户浏览器HTML5和CSS3能力的JavaScript库-->
+<script src="__CONSOLE__/js/jquery.sparkline.min.js"></script><!--需要一些画一些小图 线装图-->
+<script src="__CONSOLE__/js/toggles.min.js"></script><!--用来切换元素的显示状态-->
+<script src="__CONSOLE__/js/retina.min.js"></script><!--是一个使用高分辨率的图片替换低分辨率的图片js脚本-->
+<script src="__CONSOLE__/js/jquery.cookies.js"></script><!--Cookie插件 还可以存储用户的登录信息-->
+<script src="__CONSOLE__/js/jquery.datatables.min.js"></script><!--表格解决方案插件-->
+<script src="__CONSOLE__/js/select2.min.js"></script><!--下拉菜单动作插件-->
+<script src="__CONSOLE__/js/custom.js"></script>
+<script src="__CONSOLE__/js/bootstrapValidator.js"></script><!-- 验证插件 -->
+<script src="__CONSOLE__/js/jquery.gritter.min.js"></script>
+
+<script src="__PLUGIN__/sweetalert/js/sweetalert.min.js"></script><!--提示框插件--><!-- 列表页处理js 手写 -->
+
+{include file="template:footer" /}
+
+{block name="script"}{/block}
+<script type="text/javascript">
+
+    function checkAll(bool) {
+        $("input[type='checkbox'][name='checkid[]']").each(function (i, obj) {
+            $(this).prop('checked', bool);
+        });
+    }
+
+    function checkUp(id, name, val) {
+        swal({
+            title: "确定要更新该状态?",
+            text: "你将更新数据的状态!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "确认",
+            cancelButtonText: '取消',
+            closeOnConfirm: false
+        }, function () {
+            // 创建Form
+            var form = $('<form></form>');
+            // 设置属性
+            form.attr('action', "{:url('upfield')}");
+            form.attr('method', 'post');
+            // form的target属性决定form在哪个页面提交
+            // _self -> 当前页面 _blank -> 新页面
+            form.attr('target', '_self');
+            // 创建Input
+            var my_input = $('<input type="hidden" name="id"/>');
+            my_input.attr('value', id);
+            // 附加到Form
+            form.append(my_input);
+            // 创建Input
+            var my_input2 = $('<input type="hidden"/>');
+            my_input2.attr('name', name);
+            my_input2.attr('value', val);
+            // 附加到Form
+            form.append(my_input2);
+            $("#submit1").append(form);
+            // 提交表单
+            form.submit();
+            return true;
+        });
+    }
+
+    function checkDel(id) {
+        if (id == 0) {
+            if ($("input[type='checkbox'][name='checkid[]']:checked").size() == 0) {
+                swal("出错了", "没有选中任何数据", "error");
+                return;
+            }
+        }
+
+        swal({
+            title: "确定要删除选中数据?",
+            text: "你将无法恢复删除的数据!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "确认",
+            cancelButtonText: '取消',
+            closeOnConfirm: false
+        }, function () {
+            // 创建Form
+            var form = $('<form></form>');
+            // 设置属性
+            form.attr('action', "{:url('delete')}");
+            form.attr('method', 'post');
+            // form的target属性决定form在哪个页面提交
+            // _self -> 当前页面 _blank -> 新页面
+            form.attr('target', '_self');
+            if (id == 0) {
+                $("input[type='checkbox'][name='checkid[]']:checked").each(function () {
+                    // 创建Input
+                    var my_input = $('<input type="hidden" name="id[]"/>');
+                    my_input.attr('value', $(this).val());
+                    // 附加到Form
+                    form.append(my_input);
+                    $("#submit1").append(form);
+                });
+            } else {
+                // 创建Input
+                var my_input = $('<input type="hidden" name="id"/>');
+                my_input.attr('value', id);
+                // 附加到Form
+                form.append(my_input);
+                $("#submit1").append(form);
+            }
+            // 提交表单
+            form.submit();
+            return true;
+        });
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,155 @@
+{extend name="template/create" /}
+
+{block name="content"}
+<div class="panel panel-default">
+
+    <div class="panel-heading">
+        <h4 class="panel-title">{:$mate_title}</h4>
+    </div>
+
+    <div class="panel-body panel-body-nopadding">
+
+        <form class="form-horizontal form-bordered" id="submitForm" method="post" action="">
+
+            {present name="$vo.id"}
+            <input type="hidden" name="id" value="{$vo.id}">
+            {/present}
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">标题：</label>
+                <div class="col-sm-6">
+                    <input type="text" name="title" value="{$vo.title ?? ''}"
+                           class="form-control" placeholder="标题">
+                </div>
+            </div>
+
+            <!--<div class="form-group">
+                <label class="col-sm-3 control-label">标识：</label>
+                <div class="col-sm-6">
+                    <input type="text" name="name" value="{$vo.name ?? ''}"
+                           class="form-control" placeholder="标识">
+                </div>
+            </div>-->
+            <div class="form-group">
+                <label class="col-sm-3 control-label">模块名：</label>
+                <div class="col-sm-6">
+                    <input type="text" name="module" value="{$vo.module ?? ''}"
+                           class="form-control" placeholder="模块名">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">控制器：</label>
+                <div class="col-sm-6">
+                    <input type="text" name="controller" value="{$vo.controller ?? ''}"
+                           class="form-control" placeholder="控制器">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">方法名：</label>
+                <div class="col-sm-6">
+                    <input type="text" name="action" value="{$vo.action ?? ''}"
+                           class="form-control" placeholder="方法名">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">跳转方式：</label>
+                <div class="col-sm-1">
+                    <div class="rdio rdio-primary">
+                        <input type="radio" name="status" id="status-1" value="1">
+                        <label for="status-1">启用</label>
+                    </div>
+
+                </div>
+                <div class="col-sm-1">
+                    <div class="rdio rdio-primary">
+                        <input type="radio" name="status" id="status-0" value="0">
+                        <label for="status-0">禁用</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">定义规则：</label>
+                <div class="col-sm-1">
+                    <div class="rdio rdio-primary">
+                        <input type="radio" name="type" id="type-1" value="1" onclick="isshow(1)">
+                        <label for="type-1">是</label>
+                    </div>
+                </div>
+                <div class="col-sm-1">
+                    <div class="rdio rdio-primary">
+                        <input type="radio" name="type" id="type-0" value="0" onclick="isshow(0)">
+                        <label for="type-0">否</label>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group" id="show1" style="display: none">
+                <label class="col-sm-3 control-label">规则表达式：</label>
+                <div class="col-sm-6">
+                    <input type="text" name="condition" value="{$vo.condition ?? ''}"
+                           class="form-control" placeholder="规则表达式">
+                </div>
+            </div>
+
+            <div class="panel-footer">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <button type="submit" class="btn btn-primary">提交</button>
+
+                    <a href="javascript:history.back(-1);" class="btn btn-default">返回</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{/block}
+
+{block name="fileinput"}{__block__}{/block}
+{block name="ueditor"}{__block__}{/block}
+
+{block name="script"}
+<script>
+    jQuery(document).ready(function () {
+        $("[name='status'][value='{$vo.status ?? '0'}']").attr("checked", true);
+        $("[name='type'][value='{$vo.type ?? '0'}']").attr("checked", true);
+
+        isshow("{$vo.type ?? '0'}");
+
+        jQuery('#submitForm').bootstrapValidator({
+            message: '这个值是无效的',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                title: {
+                    validators: {
+                        notEmpty: {
+                            message: '标题不能为空'
+                        },
+                        stringLength: {
+                            min: 2,
+                            max: 10,
+                            message: '标题长度2~10之间'
+                        }
+                    }
+                }
+            }
+        });
+
+    });
+
+    function isshow(num) {
+        if (num == 1) {
+            $('#show1').show();
+        } else {
+            $('#show1').hide();
+        }
+    }
+</script>
+{/block}

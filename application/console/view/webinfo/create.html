@@ -1,0 +1,76 @@
+{extend name="template/create" /}
+
+{block name="content"}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">{:$mate_title}</h4>
+    </div>
+
+    <div class="panel-body panel-body-nopadding">
+        <form class="form-horizontal form-bordered" id="submitForm" action="" method="post">
+
+            {present name="$vo.id"}
+            <input type="hidden" name="id" value="{$vo.id}">
+            {/present}
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">标题：</label>
+                <div class="col-sm-6">
+                    <input type="text" name="title" value="{$vo.title ?? ''}" class="form-control"
+                                             placeholder="标题" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">详细内容：</label>
+                <div class="col-sm-6">
+                    <textarea id="content" name="content">{$vo.content ?? ''}</textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <button type="submit" class="btn btn-primary">提交</button>
+                    <a href="javascript:history.back(-1);" class="btn btn-default">返回</a>
+                </div>
+            </div><!-- form-group -->
+        </form>
+    </div><!-- panel-body -->
+</div><!-- panel -->
+
+{/block}
+{block name="fileinput"}{/block}
+{block name="ueditor"}{__block__}{/block}
+{block name="js"}{/block}
+
+{block name="script"}
+<script>
+    jQuery(document).ready(function () {
+
+        UE.getEditor("content", {initialFrameWidth: null});
+
+        jQuery('#submitForm').bootstrapValidator({
+            message: '这个值是无效的',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                title: {
+                    validators: {
+                        stringLength: {
+                            min: 4,
+                            max: 10,
+                            message: '昵称长度4~10之间'
+                        }
+                    }
+                }
+            }
+        });
+
+        jQuery(".select2").select2({
+            width: '100%',
+            minimumResultsForSearch: -1
+        });
+    });
+</script>
+{/block}

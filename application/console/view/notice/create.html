@@ -1,0 +1,78 @@
+{extend name="template/create" /}
+
+{block name="content"}
+<div class="panel panel-default">
+
+    <div class="panel-heading">
+        <h4 class="panel-title">{:$mate_title}</h4>
+    </div>
+
+    <div class="panel-body panel-body-nopadding">
+
+        <form class="form-horizontal form-bordered" id="submitForm" method="post" action="">
+
+            {present name="$vo.id"}
+            <input type="hidden" name="id" value="{$vo.id}">
+            {/present}
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">标题：</label>
+                <div class="col-sm-6">
+                    <input type="text" name="title" value="{$vo.title ?? ''}"
+                           class="form-control" placeholder="标题">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">内容：</label>
+                <div class="col-sm-6">
+                    <textarea name="content" id="container">{$vo.content ?? ''}</textarea>
+                </div>
+            </div>
+
+            <div class="panel-footer">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <button type="submit" class="btn btn-primary">提交</button>
+
+                    <a href="javascript:history.back(-1);" class="btn btn-default">返回</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{/block}
+{block name="fileinput"}{/block}
+{block name="ueditor"}{__block__}{/block}
+
+{block name="script"}
+<script>
+    jQuery(document).ready(function () {
+
+        UE.getEditor("container", {initialFrameWidth: null});
+
+        jQuery('#submitForm').bootstrapValidator({
+            message: '这个值是无效的',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                title: {
+                    validators: {
+                        notEmpty: {
+                            message: '标题不能为空'
+                        },
+                        stringLength: {
+                            min: 2,
+                            max: 10,
+                            message: '标题长度2~10之间'
+                        }
+                    }
+                }
+            }
+        });
+
+    });
+</script>
+{/block}

@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="__CONSOLE__/images/favicon.png" type="image/png">
+    <title>{$mate_title} --- {$app_title}</title>
+
+    <!-- bootstrap插件默认样式 -->
+    <link href="__CONSOLE__/css/bootstrap.min.css" rel="stylesheet">
+    <link href="__CONSOLE__/css/bootstrap-override.css" rel="stylesheet">
+    <link href="__CONSOLE__/css/weather-icons.min.css" rel="stylesheet">
+    <link href="__CONSOLE__/css/jquery-ui-1.10.3.css" rel="stylesheet">
+    <link href="__CONSOLE__/css/font-awesome.min.css" rel="stylesheet">
+    <link href="__CONSOLE__/css/animate.min.css" rel="stylesheet">
+    <link href="__CONSOLE__/css/animate.delay.css" rel="stylesheet">
+    <link href="__CONSOLE__/css/toggles.css" rel="stylesheet">
+    <link href="__CONSOLE__/css/select2.css" rel="stylesheet">
+    <link href="__CONSOLE__/css/lato.css" rel="stylesheet">
+    <link href="__CONSOLE__/css/roboto.css" rel="stylesheet">
+    <link href="__CONSOLE__/css/style.default.css" rel="stylesheet">
+    <!-- sweetalert弹出样式 -->
+    <link href="__PLUGIN__/sweetalert/css/sweetalert.css" rel="stylesheet">
+    <!-- fileinput图片上传样式 -->
+    <link href="__PLUGIN__/Fileinput/css/fileinput.css" rel="stylesheet">
+
+    {block name="css"}{/block}
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="__CONSOLE__/js/html5shiv.js"></script>
+    <script src="__CONSOLE__/js/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+<!-- start-preloader -->
+<div id="preloader">
+    <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
+</div>
+<!-- end-preloader -->
+
+<section>
+
+    {include file="template:sidebar" /}
+
+    <!-- start-mainpanel -->
+    <div class="mainpanel">
+
+        {include file="template:topbar" /}
+
+        <!-- start-pageheader -->
+        <div class="pageheader">
+            <h2><i class="fa fa-edit"></i> {$mate_title} <span>欢迎光临平台.......</span></h2>
+        </div>
+        <!-- end-pageheader -->
+
+        <!-- end-contentpanel -->
+        <div class="contentpanel">
+            {block name="content"}{/block}
+        </div>
+        <!-- end-contentpanel -->
+
+    </div>
+    <!-- end-mainpanel -->
+
+</section>
+
+
+<script src="__CONSOLE__/js/jquery-1.11.1.min.js"></script><!--jquery-1.11.1插件-->
+<script src="__CONSOLE__/js/jquery-migrate-1.2.1.min.js"></script><!--应用迁移辅助插件-->
+<script src="__CONSOLE__/js/bootstrap.min.js"></script><!--bootstrap插件-->
+
+
+<script src="__CONSOLE__/js/modernizr.min.js"></script><!--是一个检测用户浏览器HTML5和CSS3能力的JavaScript库-->
+<script src="__CONSOLE__/js/jquery.sparkline.min.js"></script><!--需要一些画一些小图 线装图-->
+<script src="__CONSOLE__/js/toggles.min.js"></script><!--用来切换元素的显示状态-->
+<script src="__CONSOLE__/js/retina.min.js"></script><!--是一个使用高分辨率的图片替换低分辨率的图片js脚本-->
+<script src="__CONSOLE__/js/jquery.cookies.js"></script><!--Cookie插件 还可以存储用户的登录信息-->
+
+<script src="__CONSOLE__/js/bootstrapValidator.js"></script><!-- 验证插件 -->
+<script src="__CONSOLE__/js/select2.min.js"></script><!--下拉菜单动作插件-->
+<script src="__CONSOLE__/js/custom.js"></script>
+
+<script src="__PLUGIN__/sweetalert/js/sweetalert.min.js"></script><!--提示框插件-->
+
+{include file="template:footer" /}
+
+<script>
+    jQuery(document).ready(function () {
+        $("input[type='text']").on('keyup', function () {
+            reg = /^ +| +$/;
+            if (reg.test(this.value)) {
+                this.value = this.value.replace(/(^\s*)|(\s*$)/g, '');
+            }
+        });
+
+        $("[myflagImg='{$user.avatar ?? '1'}']").addClass("choosed");
+
+        jQuery('#myinfoForm').bootstrapValidator({
+            message: '这个值是无效的',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                password: {
+                    validators: {
+                        identical: {
+                            field: 'repassword',
+                            message: '密码和确认密码不一致'
+                        }
+                    }
+
+                },
+                repassword: {
+                    validators: {
+                        identical: {
+                            field: 'password',
+                            message: '密码和确认密码不一致'
+                        }
+                    }
+                },
+                nickname: {
+                    validators: {
+                        stringLength: {
+                            min: 2,
+                            max: 10,
+                            message: '昵称长度2~10之间'
+                        }
+                    }
+                },
+                mobile: {
+                    validators: {
+                        regexp: {
+                            regexp: /^1(3[0-9]|4[57]|5[0-35-9]|7[0135678]|8[0-9])\d{8}$/,
+                            //手机号正则表达式
+                            message: '手机号格式不正确'
+                        }
+                    }
+                }
+            }
+        });
+
+        jQuery(".select2").select2({
+            width: '100%',
+            minimumResultsForSearch: -1
+        });
+    });
+</script>
+
+{block name="script"}{/block}
+
+{block name="time"}
+<!-- 时间控件 -->
+<script type="text/javascript" charset="utf-8" src="__PLUGIN__/datepicker/WdatePicker.js"></script>
+<script>
+
+    function initTimeInput(timeId) {
+        $("#" + timeId).live('click focus', function () {
+            WdatePicker()
+        });
+    }
+
+    function initStartTimeInput(timeId) {
+        $("#" + timeId).live('click focus', function () {
+            WdatePicker({
+                dateFmt: 'yyyy-MM-dd HH:mm:ss',
+                startDate: '%y-%M-%d 00:00:00',
+                minDate: '%y-%M-%d 00:00:00',
+            })
+        });
+    }
+
+    function initEndTimeInput(timeId) {
+        $("#" + timeId).live('click focus', function () {
+            var starttime = $("[name='starttime']").val();
+            var timestamp = Date.parse(new Date(starttime));
+            var timestamp2 = timestamp + (60 * 60 * 24 * 1000);
+            var d = new Date(timestamp2);
+
+            /*根据时间戳生成的时间对象*/
+            var maxtime = (d.getFullYear()) + "-" + (d.getMonth() + 1) + "-" + (d.getDate()) + " 23:59:59";
+
+            WdatePicker({
+                dateFmt: 'yyyy-MM-dd HH:mm:ss',
+                startDate: '%y-%M-%d 23:59:59',
+                minDate: starttime,
+                maxDate: maxtime,
+            })
+            /*maxDate: '%y-%M-#{%d+2} 23:59:59' 之后的两天*/
+        });
+    }
+
+</script>
+{/block}
+
+{block name="ueditor"}
+<!-- 编辑器插件 -->
+<script type="text/javascript" charset="utf-8" src="__PLUGIN__/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="__PLUGIN__/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="__PLUGIN__/ueditor/lang/zh-cn/zh-cn.js"></script>
+
+<script>
+
+    function initContentInput(contentId) {
+        UE.getEditor(contentId, {initialFrameWidth: null});
+    }
+
+</script>
+
+{/block}
+
+
+{block name="fileinput"}
+
+<!--图片上传-->
+<script type="text/javascript" charset="utf-8" src="__PLUGIN__/fileinput/js/fileinput.js"></script>
+<script type="text/javascript" charset="utf-8" src="__PLUGIN__/fileinput/js/plugins/canvas-to-blob.js"></script>
+<script type="text/javascript" charset="utf-8" src="__PLUGIN__/fileinput/js/plugins/purify.js"></script>
+<script type="text/javascript" charset="utf-8" src="__PLUGIN__/fileinput/js/plugins/sortable.js"></script>
+
+<script>
+
+    //单图上传
+    function initImageInputOne(file, fieldName) {
+        //单图上传
+        var $input = $("#" + file);
+        var $picurl = $("input[name='" + fieldName + "']");
+
+        var footerTemplate = '<div class="file-thumbnail-footer">{actions}</div>';
+
+        var $Preview = [];
+        var $Config = [];
+
+        if ($picurl.val() != '') {
+            $picurl.each(function (i, e) {
+                $Preview.push("<img " +
+                    "   class='kv-preview-data file-preview-image' " +
+                    "   style='width:320px;' " +
+                    "   src='__ROOT__" + $(this).val() + "'>");
+                $Config.push({
+                    width: '160px',// 图片高度
+                    size: 0,
+                    url: "<input type='hidden' name='" + fieldName + "' value='" + $(this).val() + "'>",
+                    key: i
+                });
+            });
+        }
+
+        //单图上传
+        $input.fileinput({
+            uploadUrl: "{:url('Console/common/upload')}",
+            deleteUrl: "{:url('Console/common/updel')}",
+            uploadExtraData: {},
+            deleteExtraData: {},
+//            browseClass: "btn btn-primary", //按钮样式
+            autoReplace: false,
+            overwriteInitial: false,
+            showUploadedThumbs: false,
+            uploadAsync: true, //默认异步上传
+            showCaption: false,//是否显示被选文件的简介
+            showBrowse: false,//是否显示浏览按钮
+            showPreview: true,//是否显示预览区域
+            showRemove: false,//是否显示移除按钮
+            showUpload: false,//是否显示上传按钮
+            showCancel: false,//是否显示取消按钮
+            showClose: false,//是否显示关闭按钮
+            dropZoneEnabled: true,//是否显示拖拽区域
+            enctype: 'multipart/form-data',// 上传图片的设置
+//            minImageWidth: 50, //图片的最小宽度
+//            minImageHeight: 50,//图片的最小高度
+//            maxImageWidth: 10000,//图片的最大宽度
+//            maxImageHeight: 10000,//图片的最大高度
+//            maxFileSize: 200,//单位为kb，如果为0表示不限制文件大小
+//            minFileCount: 1,
+//            maxFileCount: 1, //表示允许同时上传的最大文件个数
+            validateInitialCount: true,
+            allowedPreviewTypes: ['image'],
+            allowedFileTypes: ['image'],
+            allowedFileExtensions: ['jpg', 'gif', 'png'],//接收的文件后缀
+            previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
+            previewFileIconSettings: {
+                'docx': '<i class="fa fa-file-word-o text-primary"></i>',
+                'xlsx': '<i class="fa fa-file-excel-o text-success"></i>',
+                'pptx': '<i class="fa fa-file-powerpoint-o text-danger"></i>',
+                'pdf': '<i class="fa fa-file-pdf-o text-danger"></i>',
+                'zip': '<i class="fa fa-file-archive-o text-muted"></i>',
+                'sql': '<i class="fa fa-file-word-o text-primary"></i>',
+            },
+            initialPreview: $Preview,
+            initialPreviewConfig: $Config,
+            layoutTemplates: {
+                footer: footerTemplate
+            }
+        }).on("filebatchselected", function (event, files) {
+            $input.fileinput("upload");//选择后自动上传
+        }).on('fileuploaded', function (event, data, previewId, index) {
+            $picurl.val(data.response.image);
+        }).on("filecleared", function (event, files) {
+            $picurl.val('');
+        });
+    }
+
+    //组图上传
+    function initImageInputMore(fileId, name, image) {
+        var $input = $("#" + fileId);
+        var $picurl = $("input[name='" + image + "']");
+
+        var $Preview = [];
+        var $Config = [];
+
+        $picurl.each(function (i, e) {
+            $Preview.push("<img" +
+                "   class='kv-preview-data file-preview-image' " +
+                "   style='width:160px;height:160px;' " +
+                "   src='__ROOT__" + $(this).val() + "'>");
+
+            $Config.push({
+                url: "<input type='hidden' name='" + name + "' value='" + $(this).val() + "'>",
+                key: i
+            });
+        });
+
+        var footerTemplate = '<div class="file-thumbnail-footer">\n' +
+            '   <button type="button" class="kv-file-forward text-info header-left" title="前移">' +
+            '       <i class="glyphicon glyphicon-chevron-left"></i>' +
+            '   </button>\n' +
+            '   &nbsp;{size}&nbsp;\n' +
+            '   <button tytextpe="button" class="kv-file-backward text-danger header-right" title="后移">' +
+            '       <i class="glyphicon glyphicon-chevron-right"></i>' +
+            '   </button>\n' +
+            '   {actions}\n' +
+            '</div>';
+
+        $input.fileinput({
+            uploadUrl: "{:url('Console/common/upload')}",
+            deleteUrl: "{:url('Console/common/updel')}",
+            autoReplace: true,
+            overwriteInitial: false,
+            showUploadedThumbs: true,
+            maxFileCount: 6,
+            initialPreview: $Preview,
+            initialPreviewConfig: $Config,
+            layoutTemplates: {
+                size: '<samp><small>({sizeText})</small></samp>',
+                footer: footerTemplate,
+                actionUpload: ''
+            }
+        }).on("filebatchselected", function (event, files) {
+            $input.fileinput("upload");//选择后自动上传
+        }).on('fileuploaded', function (event, data, previewId) {
+            var dataObj = eval("(" + data.response + ")");
+            $('#' + previewId).append("<input type='hidden' name='" + name + "' value='" + dataObj['img'] + "'>");
+            $picurl.change();
+        }).on("filecleared", function (event, files) {
+            $picurl.val('').change();
+        });
+    }
+</script>
+{/block}
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!-- start-leftpanel -->
+<div class="leftpanel">
+
+    <!-- start-logopanel -->
+    <div class="logopanel">
+        <h1>
+            <a href="{:url('Console/Dashboard/index')}">
+                <img src="__ROOT__/logo.png" alt="" style="height:40px;margin-top:-10px;">
+            </a>
+        </h1>
+    </div>
+    <!-- end-logopanel -->
+
+
+    <!-- start-leftpanelinner -->
+    <div class="leftpanelinner">
+        <ul class="nav nav-pills nav-stacked nav-bracket">
+            {volist name="menu_left" id="menu"}
+            {empty name="menu[1]"}
+            <li class="{if condition='in_array($controller,$menu[0][3])'} active {/if}">
+                <a href="{:url($menu.0.1)}">
+                    <i class="{$menu.0.2}"></i>
+                    <span>{$menu.0.0}</span>
+                </a>
+            </li>
+            {else /}
+            <li class="nav-parent {if condition='in_array($controller,$menu[0][2])'} nav-active active {/if}">
+                <a href="javascript:;"><i class="{$menu.0.1}"></i><span>{$menu.0.0}</span></a>
+                <ul class="children"  {if condition='in_array($controller,$menu[0][2])'} style="display: block;" {/if}>
+                    {volist name="menu[1]" id="menu_2"}
+                    <li class='{if condition="in_array($controller,$menu_2[2])"} active {/if}'>
+                        <a href="{:url($menu_2.1)}"><i class="fa fa-caret-right"></i>{$menu_2.0}</a>
+                    </li>
+                    {/volist}
+                </ul>
+            </li>
+            {/empty}
+            {/volist}
+        </ul>
+    </div>
+    <!-- end-leftpanelinner -->
+
+</div>
+<!-- end-leftpanel -->

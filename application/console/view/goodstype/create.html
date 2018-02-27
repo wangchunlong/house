@@ -1,0 +1,131 @@
+{extend name="template/create" /}
+
+{block name="content"}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">{:$mate_title}</h4>
+    </div>
+    <div class="panel-body panel-body-nopadding">
+
+        <form class="form-horizontal form-bordered" id="submitForm" action="" method="post">
+
+            {present name="$vo.id"}
+            <input type="hidden" name="id" value="{$vo.id}">
+            {/present}
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">上级分类：</label>
+                <div class="col-sm-6" id="one_type_list">
+                    <select class="select2" name="parentid">
+                        <option value="0" falg="0">一级分类</option>
+                        {volist name="goodstype_list" id="one_type"}
+                        <option value="{$one_type.id}" falg="1">
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            {$one_type.title}
+                        </option>
+                        {volist name="one_type.data" id="two_type"}
+                        <option value="{$two_type.id}" falg="2">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            {$two_type.title}
+                        </option>
+                        {/volist}
+                        {/volist}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">商品分类标题：</label>
+                <div class="col-sm-6">
+                    <input type="text" name="title" value="{$vo.title ?? ''}"
+                           class="form-control" placeholder="标题" required>
+                </div>
+            </div>
+
+            <div class="form-group" id="image">
+                <label class="col-sm-3 control-label">商品图片：</label>
+                <div class="col-sm-6">
+                    <input id="fileone" type="file" class="file-loading">
+                    <input type="hidden" id="picurl" placeholder="商品图片" name="picurl" value="{$vo.picurl ?? ''}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">是否显示：</label>
+                <div class="col-sm-1 wh-inline">
+                    <div class="rdio rdio-primary">
+                        <input type="radio" name="state" id="state-1" value="1">
+                        <label for="state-1">是</label>
+                    </div>
+                </div>
+                <div class="col-sm-1 wh-inline">
+                    <div class="rdio rdio-primary">
+                        <input type="radio" name="state" id="state-0" value="0">
+                        <label for="state-0">否</label>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="panel-footer">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <button type="submit" class="btn btn-primary">提交</button>
+
+                    <a href="javascript:history.back(-1);" class="btn btn-default">返回</a>
+                </div>
+            </div><!-- panel-footer -->
+        </form>
+    </div><!-- panel-body -->
+</div>
+{/block}
+{block name="fileinput"}{__block__}{/block}
+{block name="ueditor"}{/block}
+{block name="js"}{/block}
+{block name="script"}
+<script>
+    jQuery(document).ready(function () {
+        $("[name='parentid']").find("[value='{$vo.parentid ?? ''}']").attr("selected", true);
+        $("[name='is_recom'][value='{$vo.is_recom ?? '1'}']").attr("checked", true);
+
+        hasimg();
+
+        fileinputOne("fileone", "picurl");
+
+        $("[name='parentid']").live('change', function () {
+            var falg = $("option:selected").attr('falg');
+
+            var input = $('<input type="hidden" name="level"/>');
+            input.attr('value', falg * 1 + 1);
+
+            $('#submitForm').append(input);
+
+            if (falg == 2) {
+                $('#image').show();
+            } else {
+                $('#image').hide();
+            }
+        });
+
+        jQuery('#submitForm').bootstrapValidator({
+            message: '这个值是无效的',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            }
+        });
+
+        //select2
+        jQuery(".select2").select2({
+            width: '100%',
+            minimumResultsForSearch: -1
+        });
+    });
+
+    function hasimg() {
+
+        ('{$vo.level ?? ""}' * 1 == 3) ? $('#image').show() : $('#image').hide();
+
+    }
+</script>
+{/block}

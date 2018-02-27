@@ -1,0 +1,66 @@
+{extend name="template/index" /}
+
+{block name="content"}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <a href="{:url('console/goodstype/create')}" class="btn btn-link pull-right">
+            <i class="fa fa-plus">&nbsp;添加分类&nbsp;</i>
+        </a>
+        <h4 class="panel-title">{:$mate_title}</h4>
+    </div>
+
+    <div class="panel-body panel-body-nopadding">
+        <div class="table-responsive">
+            <table class="table table-info table-striped  table-hover text-center">
+                <thead>
+                <tr>
+                    <th width="10%">序号</th>
+                    <th>名称</th>
+                    <th>图片</th>
+                    <th width="20%">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {volist name="list" id="vo"}
+                <tr class="rowpid_{$vo.parentid}">
+                    <td>{$i}</td>
+                    <td class="text-left">
+                        {switch name="$vo.count"}
+                        {case value="1"}<i class="glyphicon glyphicon-chevron-down text-success">&nbsp;{$vo.title}</i>{/case}
+                        {case value="2"}&nbsp;&nbsp;&nbsp;&nbsp;<i class="glyphicon glyphicon-chevron-right text-primary">&nbsp;{$vo.title}</i>{/case}
+                        {case value="3"}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-circle">&nbsp;&nbsp;{$vo.title}</i>{/case}
+                        {/switch}
+                    </td>
+                    <td>
+                        {eq name="vo.count" value="3"}
+                        <img src="__ROOT__{$vo.picurl}" width="100px" alt="分类图片">
+                        {else/}
+                        -
+                        {/eq}
+                    </td>
+                    <td>
+                        <a href="{:url('update',['id'=>$vo.id])};">
+                            <i class="fa fa-edit">&nbsp;编 辑&nbsp;</i>
+                        </a>
+                        &nbsp;&nbsp;
+                        <a href="javascript:checkDel('{$vo.id}');">
+                            <i class="fa fa-trash-o">&nbsp;删除&nbsp;</i>
+                        </a>
+                    </td>
+                </tr>
+                {/volist}
+                {empty name="list"}
+                <tr>
+                    <td colspan="11">
+                        <div style='font-size:24px;margin:30px;'>没有找到记录</div>
+                    </td>
+                </tr>
+                {/empty}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="script"}{/block}

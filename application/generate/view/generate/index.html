@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>代码生成器</title>
+</head>
+<body>
+<div class="panel-body panel-body-nopadding">
+
+    <form class="form-horizontal form-bordered" id="submitForm" method="post" action="">
+
+
+        <label class="col-sm-3 control-label"> 标题： </label>
+
+        <input type="text" name="name" value=""
+               class="form-control" placeholder="标题">
+
+
+        <label class="col-sm-3 control-label">控制器：</label>
+
+        <input type="text" name="controller" value="{$vo.controller ?? ''}"
+               class="form-control" placeholder="控制器 首字母大写 :  Orders User ...">
+
+
+        <label class="col-sm-3 control-label">创建文件:</label>
+
+        <input type="checkbox" id="group-1" class="check" name="group[]"
+               value="1" checked/>
+        <label for="group-1">创建控制器</label>
+
+
+        <input type="checkbox" id="group-2" class="check" name="group[]"
+               value="2" checked/>
+        <label for="group-2">创建模型</label>
+
+
+        <input type="checkbox" id="group-3" class="check" name="group[]"
+               value="3" checked/>
+        <label for="group-3">创建验证器</label>
+
+        <button type="submit" class="btn btn-primary">提交</button>
+
+        <a href="javascript:history.back(-1);" class="btn btn-default">返回</a>
+    </form>
+</div>
+</body>
+</html>
+
+

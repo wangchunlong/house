@@ -1,0 +1,94 @@
+{extend name="template/index" /}
+
+{block name="content"}
+<div class="panel panel-default">
+    <div class="panel-heading"><h4 class="panel-title">{:$mate_title}</h4></div>
+    <div class="panel-body panel-body-nopadding">
+        <div class="table-responsive">
+            <table class="table table-info table-striped  table-hover text-center">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>省级</th>
+                    <!--<th>状态</th>-->
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {volist name="list" id="vo"}
+                <tr>
+                    <td>{$vo.province_id}</td>
+                    <td>{$vo.province_name}</td>
+                    <!-- <td>
+                         {eq name="vo.state" value="1"}
+                         <a href="javascript:province('{$vo.id}','state','0');">
+                             <i class="glyphicon glyphicon-ok-sign text-success"></i>
+                         </a>
+                         {else/}
+                         <a href="javascript:province('{$vo.id}','state','1');">
+                             <i class="glyphicon glyphicon-remove-sign text-danger"></i>
+                         </a>
+                         {/eq}
+                     </td>-->
+                    <td>
+                        <a href="{:url('console/region/city',['id'=>$vo.province_id])}">
+                            <i class="glyphicon glyphicon-zoom-in">&nbsp;市级地区</i>
+                        </a>
+                    </td>
+                </tr>
+                {/volist}
+                {empty name="list"}
+                <tr>
+                    <td colspan="3">
+                        <div style='font-size:24px;margin:30px;'>没有找到记录</div>
+                    </td>
+                </tr>
+                {/empty}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+
+    function province(id, name, val) {
+        swal({
+            title: "确定要更新该状态?",
+            text: "你将更新数据的状态!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "确认",
+            cancelButtonText: '取消',
+            closeOnConfirm: false
+        }, function () {
+            // 创建Form
+            var form = $('<form></form>');
+            // 设置属性
+            form.attr('action', "{:url('upProvinceField')}");
+            form.attr('method', 'post');
+            // form的target属性决定form在哪个页面提交
+            // _self -> 当前页面 _blank -> 新页面
+            form.attr('target', '_self');
+            // 创建Input
+            var my_input = $('<input type="hidden" name="id"/>');
+            my_input.attr('value', id);
+            // 附加到Form
+            form.append(my_input);
+            // 创建Input
+            var my_input2 = $('<input type="hidden"/>');
+            my_input2.attr('name', name);
+            my_input2.attr('value', val);
+            // 附加到Form
+            form.append(my_input2);
+            $("#submit1").append(form);
+            // 提交表单
+            form.submit();
+            return true;
+        });
+    }
+</script>
+
+{/block}

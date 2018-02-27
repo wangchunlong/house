@@ -1,0 +1,51 @@
+{extend name="template/index" /}
+
+{block name="content"}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">{$mate_title}</h4>
+    </div>
+
+    <div class="panel-body panel-body-nopadding">
+
+      <!--  <form class="form-horizontal form-bordered" action="" method="">
+            <div class="form-group">
+                <div class="col-md-8">
+
+                </div>
+            </div>
+        </form>-->
+
+        <div class="table-responsive">
+            <table class="table table-info table-striped  table-hover text-center">
+                <thead>
+                <tr>
+                    <th>管理员</th>
+                    <th>操作</th>
+                    <th>IP</th>
+                    <th>时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                {volist name="list" id="vo"}
+                <tr>
+                    <td>{$vo.nickname ?? $vo.username}</td>
+                    <td>{$vo.title}</td>
+                    <td>{$vo.ip}</td>
+                    <td>{$vo.create_time}</td>
+                </tr>
+                {/volist}
+                {empty name="list"}
+                <tr>
+                    <td colspan="7">
+                        <div style='font-size:24px;margin:30px;'>没有找到记录</div>
+                    </td>
+                </tr>
+                {/empty}
+                </tbody>
+            </table>
+        </div>
+        {:$list->render()}
+    </div>
+</div>
+{/block}
